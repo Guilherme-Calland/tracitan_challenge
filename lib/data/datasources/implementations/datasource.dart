@@ -3,13 +3,19 @@ import 'package:tracitan_challenge_development/data/datasources/i_datasource.dar
 
 class Datasource implements IDatasource{
 
-  static const String _baseUrl = 'fake-api.tractian.com';
+  static const String _baseUrl = 'https://fake-api.tractian.com';
   final ApiClient _apiClient;
+
+  static Datasource? _instance;
+  static Datasource getInstance(ApiClient client){
+    _instance ??= Datasource(client);
+    return _instance!;
+  }
 
   Datasource(this._apiClient);
 
   @override
-  Future<List<Map<String, dynamic>>> getCompanies() async {
+  Future<List<dynamic>> getCompanies() async {
     try{
       const String url = '$_baseUrl/companies';
       final response = await _apiClient.get(url);

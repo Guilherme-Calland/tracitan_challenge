@@ -11,7 +11,7 @@ class ApiClient{
     return _instance!;
   }
 
-    Future<ApiResponse<List<Map<String, dynamic>>>> get(
+    Future<ApiResponse<List<dynamic>>> get(
     String path) async {
     var response = await _dio.get(
       path,
@@ -21,7 +21,7 @@ class ApiClient{
         response.statusCode,
         response.statusCode == 500
             ? null
-            : (response.data is List<Map<String, dynamic>>)
+            : (response.data is List<dynamic>)
                 ? response.data
                 : {});
   }
