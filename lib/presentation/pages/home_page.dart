@@ -6,8 +6,10 @@ import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key}){
-    final controller = globalContext!.read<HomeController>();
-    controller.getCompanies();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      final controller = globalContext!.read<HomeController>();
+      controller.getCompanies();
+    });
   }
 
   @override

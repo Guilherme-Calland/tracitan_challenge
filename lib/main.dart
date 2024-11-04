@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tracitan_challenge_development/core/app_navigator.dart';
 import 'package:tracitan_challenge_development/core/providers/provider_aux.dart';
 import 'package:tracitan_challenge_development/presentation/pages/home_page.dart';
 void main() {
@@ -15,6 +16,7 @@ class TracitanChallenge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: AppNavigator.navigatorKey,
       home: HomePage(),
     );
   }

@@ -14,8 +14,8 @@ class CompanyButton extends StatelessWidget {
       child: Container(
         width: double.infinity,
         color: Colors.amber,
-        padding: EdgeInsets.all(20),
-        child: Text('companyName')
+        padding: const EdgeInsets.all(20),
+        child: Text(company.name)
       ),
     );
   }

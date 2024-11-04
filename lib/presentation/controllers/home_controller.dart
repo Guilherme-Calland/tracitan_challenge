@@ -4,7 +4,6 @@ import 'package:tracitan_challenge_development/domain/entities/company.dart';
 import 'package:tracitan_challenge_development/domain/usecases/get_companies_usecase.dart';
 
 class HomeController extends ChangeNotifier{
-
   final GetCompaniesUsecase getCompaniesUsecase;
 
   HomeController({
@@ -33,7 +32,7 @@ class HomeController extends ChangeNotifier{
       _companies.addAll(companiesResult);
     });
 
-    _loading = true;
+    _loading = false;
     notifyListeners();
   }
 }
