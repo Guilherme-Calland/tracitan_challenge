@@ -47,7 +47,7 @@ class Repository implements IRepository{
   @override
   Future<Either<Exception, List<Location>>> getLocations(String companyId) async {
      try{
-      final result = await _datasource.getAssets(companyId);
+      final result = await _datasource.getLocations(companyId);
       return Right( result.map((json) => _locationAdapter.fromJson(json)).toList());
     }catch(e){
       return Left(Exception(e));
