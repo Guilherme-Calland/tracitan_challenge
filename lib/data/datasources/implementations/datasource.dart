@@ -31,17 +31,36 @@ class Datasource implements IDatasource{
   }
 
   @override
-  Future<List> getAssets(String companyId) async {
-    // TODO: implement getLocations
-
-    throw UnimplementedError();
+  Future<List<dynamic>> getAssets(String companyId) async {
+    try{
+      final String url = '$_baseUrl/companies/$companyId/assets';
+      final response = await _apiClient.get(url);
+      final success = response.statusCode == 200 && response.data != null;
+      if(success){
+        return response.data!;
+      }else{
+        throw Exception("Status code: ${response.statusCode}");
+      }
+    }catch(e){
+      rethrow;
+    }
 
   }
 
 
   @override
-  Future<List> getLocations(String companyId) {
-    // TODO: implement getLocations
-    throw UnimplementedError();
+  Future<List<dynamic>> getLocations(String companyId) async{
+     try{
+      final String url = '$_baseUrl/companies/$companyId/locations';
+      final response = await _apiClient.get(url);
+      final success = response.statusCode == 200 && response.data != null;
+      if(success){
+        return response.data!;
+      }else{
+        throw Exception("Status code: ${response.statusCode}");
+      }
+    }catch(e){
+      rethrow;
+    }
   }
 }

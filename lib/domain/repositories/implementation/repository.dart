@@ -35,15 +35,23 @@ class Repository implements IRepository{
   }
 
   @override
-  Future<Either<Exception, List<Asset>>> getAssets() {
-    // TODO: implement getAssets
-    throw UnimplementedError();
+  Future<Either<Exception, List<Asset>>> getAssets(String companyId) async{
+    try{
+      final result = await _datasource.getAssets(companyId);
+      return Right( result.map((json) => _assetAdapter.fromJson(json)).toList() );
+    }catch(e){
+      return Left(Exception(e));
+    }
   }
 
   @override
-  Future<Either<Exception, List<Location>>> getLocations() {
-    // TODO: implement getLocations
-    throw UnimplementedError();
+  Future<Either<Exception, List<Location>>> getLocations(String companyId) async {
+     try{
+      final result = await _datasource.getAssets(companyId);
+      return Right( result.map((json) => _locationAdapter.fromJson(json)).toList());
+    }catch(e){
+      return Left(Exception(e));
+    }
   }
 
 }
