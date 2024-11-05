@@ -25,8 +25,9 @@ class HomeProvider extends ChangeNotifier{
     notifyListeners();
 
     final result = await getCompaniesUsecase(const NoParams());
-    result.fold((_){
+    result.fold((e){
       _hasError = true;
+      debugPrint('$e');
     }, (companiesResult){
       _companies.clear();
       _companies.addAll(companiesResult);

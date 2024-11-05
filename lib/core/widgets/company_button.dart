@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:tracitan_challenge_development/core/routes.dart';
 import 'package:tracitan_challenge_development/domain/entities/company.dart';
 
 class CompanyButton extends StatelessWidget {
   const CompanyButton({
     super.key, required this.company,
-    required this.onTap
   });
 
   final Company company;
-  final Function(String) onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        onTap(company.id);
-      },
+      onTap: () => Navigator.pushNamed(context, AppRoutes.assets, arguments: company.id),
       child: Container(
         width: double.infinity,
         color: Colors.amber,

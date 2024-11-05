@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tracitan_challenge_development/core/constants/messages.dart';
-import 'package:tracitan_challenge_development/core/global_context.dart';
 import 'package:tracitan_challenge_development/core/widgets/company_button.dart';
 import 'package:tracitan_challenge_development/presentation/providers/home_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key}){
+  HomePage(BuildContext context, {super.key}){
     WidgetsBinding.instance.addPostFrameCallback((_){
-      final provider = globalContext!.read<HomeProvider>();
+      final provider = context.read<HomeProvider>();
       provider.getCompanies();
     });
   }
 
   @override
-  Widget build(BuildContext _) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<HomeProvider>(
-        builder: (_, controller, __) {
+        builder: (context, controller, __) {
           if(controller.loading || controller.hasError){
             return Center(
               child: (){
@@ -36,9 +35,7 @@ class HomePage extends StatelessWidget {
               itemCount: controller.companies.length,
               itemBuilder: (_, index) {
                 final company = controller.companies[index];
-                return CompanyButton(company: company, onTap: (companyId){
-                  
-                },);
+                return CompanyButton(company: company);
               },
             );
           }
