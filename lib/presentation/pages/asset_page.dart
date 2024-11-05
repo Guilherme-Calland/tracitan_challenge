@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tracitan_challenge_development/core/constants/messages.dart';
-import 'package:tracitan_challenge_development/domain/entities/asset.dart';
 import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
-import 'package:tracitan_challenge_development/domain/entities/location.dart';
 import 'package:tracitan_challenge_development/presentation/providers/asset_provider.dart';
 
 class AssetPage extends StatelessWidget {
@@ -50,13 +48,14 @@ class AssetPage extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: provider.locations.where(
-                            (location) {
-                              return location.parentId == null;
+                        children: provider.items.where(
+                            (item) {
+                              return item.parentId == null;
                             },
                           ).map(
-                            (locationNoParent) {
-                              return TestWidget(locationNoParent.name, children: provider.locations.where((l) => l.parentId == locationNoParent.id).toList());
+                            (itemNoParent) {
+                              //RFT-1510 nao esquece de remover esse runtimeType
+                              return TestWidget('${itemNoParent.name} ${itemNoParent.runtimeType}', children: provider.items.where((l) => l.parentId == itemNoParent.id).toList());
                             },
                           ).toList(),
                       ),
@@ -111,12 +110,7 @@ class _TestWidgetState extends State<TestWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: widget.children.map((parent){
               return TestWidget(parent.name, children: widget.children.where((child){
-                if(child is Location){
-                  return child.parentId == parent.id;
-                }else{
-                  final asset = child as Asset;
-                  return asset.parentId == parent.id || asset.locationId == parent.id;
-                }
+                return child.parentId == parent.id;
               }).toList());
             }).toList(),
           ),
