@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tracitan_challenge_development/core/constants/messages.dart';
+import 'package:tracitan_challenge_development/domain/entities/asset.dart';
 import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
+import 'package:tracitan_challenge_development/domain/entities/location.dart';
 import 'package:tracitan_challenge_development/presentation/providers/asset_provider.dart';
 
 class AssetPage extends StatelessWidget {
@@ -48,8 +50,7 @@ class AssetPage extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ...provider.locations.where(
+                        children: provider.locations.where(
                             (location) {
                               return location.parentId == null;
                             },
@@ -57,17 +58,7 @@ class AssetPage extends StatelessWidget {
                             (locationNoParent) {
                               return TestWidget(locationNoParent.name, children: provider.locations.where((l) => l.parentId == locationNoParent.id).toList());
                             },
-                          ),
-                          ...provider.assets.where(
-                            (asset) {
-                              return asset.parentId == null;
-                            },
-                          ).map(
-                            (assetNoParent) {
-                              return Text(assetNoParent.name);
-                            },
-                          ),
-                        ],
+                          ).toList(),
                       ),
                     ),
                   );
@@ -102,6 +93,7 @@ class _TestWidgetState extends State<TestWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
           onTap: (){
@@ -112,12 +104,19 @@ class _TestWidgetState extends State<TestWidget> {
           child: Text(widget.name)
         ),
         if(visible)
-         Padding(
+         Container(
+          width: double.infinity,
           padding: const EdgeInsets.only(left: 16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: widget.children.map((parent){
               return TestWidget(parent.name, children: widget.children.where((child){
-                return child.parentId == parent.id;
+                if(child is Location){
+                  return child.parentId == parent.id;
+                }else{
+                  final asset = child as Asset;
+                  return asset.parentId == parent.id || asset.locationId == parent.id;
+                }
               }).toList());
             }).toList(),
           ),
