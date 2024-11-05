@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tracitan_challenge_development/core/constants/messages.dart';
 import 'package:tracitan_challenge_development/core/global_context.dart';
 import 'package:tracitan_challenge_development/core/widgets/company_button.dart';
 import 'package:tracitan_challenge_development/presentation/providers/home_provider.dart';
@@ -7,8 +8,8 @@ import 'package:provider/provider.dart';
 class HomePage extends StatelessWidget {
   HomePage({super.key}){
     WidgetsBinding.instance.addPostFrameCallback((_){
-      final controller = globalContext!.read<HomeProvider>();
-      controller.getCompanies();
+      final provider = globalContext!.read<HomeProvider>();
+      provider.getCompanies();
     });
   }
 
@@ -23,7 +24,7 @@ class HomePage extends StatelessWidget {
                 if(controller.loading){
                   return const CircularProgressIndicator();
                 }else{
-                  return const Text("An error has occured");
+                  return const Text(Messages.error);
                 }
               }()
             );
