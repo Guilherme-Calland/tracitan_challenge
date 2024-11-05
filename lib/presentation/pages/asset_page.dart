@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tracitan_challenge_development/core/constants/messages.dart';
+import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
 import 'package:tracitan_challenge_development/presentation/providers/asset_provider.dart';
 
 class AssetPage extends StatelessWidget {
@@ -8,21 +9,23 @@ class AssetPage extends StatelessWidget {
     final provider = context.read<AssetProvider>();
     provider.clear();
 
-    try{
+    try {
       String companyId = ModalRoute.of(context)!.settings.arguments as String;
-      WidgetsBinding.instance.addPostFrameCallback((_){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         provider.loadData(companyId);
       });
-    }catch(e){
+    } catch (e) {
       debugPrint('$e');
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: const Text("Assets"),),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Assets"),
+      ),
       body: Column(
         children: [
           Container(),
@@ -52,7 +55,7 @@ class AssetPage extends StatelessWidget {
                             },
                           ).map(
                             (locationNoParent) {
-                              return Text(locationNoParent.name);
+                              return TestWidget(locationNoParent.name, children: provider.locations.where((l) => l.parentId == locationNoParent.id).toList());
                             },
                           ),
                           ...provider.assets.where(
@@ -74,6 +77,52 @@ class AssetPage extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class TestWidget extends StatefulWidget {
+  const TestWidget(
+    this.name, {
+    super.key,
+    required this.children
+  });
+
+  final String name;
+  final List<CompanyItem> children;
+
+  @override
+  State<TestWidget> createState() => _TestWidgetState();
+}
+
+class _TestWidgetState extends State<TestWidget> {
+
+  bool visible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: (){
+            setState(() {
+              visible = !visible;
+            });
+          },
+          child: Text(widget.name)
+        ),
+        if(visible)
+         Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Column(
+            children: widget.children.map((parent){
+              return TestWidget(parent.name, children: widget.children.where((child){
+                return child.parentId == parent.id;
+              }).toList());
+            }).toList(),
+          ),
+        )
+      ],
     );
   }
 }

@@ -1,12 +1,20 @@
-class Asset{
-  final String id;
-  final String name;
-  final String? parentId;
+import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
+
+class Asset extends CompanyItem{
   final String? sensorId;
   final String? sensorType;
   final String? status;
   final String? gatewayId;
   final String? locationId;
 
-  Asset({required this.id, required this.name, required this.parentId, required this.sensorId, required this.sensorType, required this.status, required this.gatewayId, required this.locationId});
+  Asset({
+    required super.id,
+    required super.name,
+    required super.parentId,
+    required this.sensorId,
+    required this.sensorType,
+    required this.status,
+    required this.gatewayId,
+    required this.locationId,
+  });
 }

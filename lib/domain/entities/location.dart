@@ -1,7 +1,5 @@
-class Location {
-  final String id;
-  final String name;
-  final String? parentId;
+import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
 
-  Location({required this.id, required this.name, required this.parentId,});
+class Location extends CompanyItem{
+  Location({required super.id, required super.name, required super.parentId,});
 }
