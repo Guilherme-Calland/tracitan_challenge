@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracitan_challenge_development/core/constants/enums/component_status.dart';
+import 'package:tracitan_challenge_development/domain/entities/asset.dart';
 import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
 import 'package:tracitan_challenge_development/domain/usecases/get_assets_usecase.dart';
 import 'package:tracitan_challenge_development/domain/usecases/get_locations_usecase.dart';
@@ -23,11 +24,14 @@ class AssetProvider extends ChangeNotifier{
     _loading = true;
     _error = false;
     _items.clear();
+    _allItems.clear();
     _status = null;
   }
 
   final List<CompanyItem> _items = [];
   List<CompanyItem> get items => _items;
+
+  final List<CompanyItem> _allItems = [];
 
   ComponentStatus? _status;
   ComponentStatus? get status => _status;
@@ -42,6 +46,8 @@ class AssetProvider extends ChangeNotifier{
       _getLocations(companyId)
     ];
     await Future.wait(futureLoadList);
+
+    _allItems.addAll(_items);
 
     _loading = false;
     notifyListeners();
@@ -73,6 +79,45 @@ class AssetProvider extends ChangeNotifier{
       _status = null;
     }else{
       _status = s;
+    }
+
+    if(_status != null){
+      _items.clear();
+
+      for (var item in _allItems) {
+        if(item is Asset){
+          bool isComponent = item.sensorType != null;
+          if((item.status == _status) && isComponent){
+            _items.add(item);
+          }
+        }
+      }
+
+      final List<CompanyItem> newParentItems = [];
+      newParentItems.addAll(_items);
+      do {
+        List<CompanyItem> tempList = [];
+        for(var item in _allItems){
+          bool itemHasSavedParent = newParentItems.any((i){
+            if(i is Asset){
+              return i.parentId == item.id || i.locationId == item.id;
+            }else{
+              return i.parentId == item.id;
+            }
+          });
+          if(itemHasSavedParent) {
+            tempList.add(item);
+          }
+        }
+
+        newParentItems.clear();
+        newParentItems.addAll(tempList);
+        _items.addAll(tempList);
+      } while (newParentItems.isNotEmpty);
+
+
+    }else{
+      _items.addAll(_allItems);
     }
 
     notifyListeners();

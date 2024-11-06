@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tracitan_challenge_development/core/constants/enums/component_status.dart';
 import 'package:tracitan_challenge_development/core/constants/messages.dart';
-import 'package:tracitan_challenge_development/presentation/pages/asset/widgets/asset_list.dart';
+import 'package:tracitan_challenge_development/domain/entities/asset.dart';
+import 'package:tracitan_challenge_development/domain/entities/location.dart';
+import 'package:tracitan_challenge_development/presentation/pages/asset/widgets/company_expandable_item.dart';
 import 'package:tracitan_challenge_development/presentation/pages/asset/widgets/status_button.dart';
 import 'package:tracitan_challenge_development/presentation/providers/asset_provider.dart';
 
@@ -53,8 +55,30 @@ class AssetPage extends StatelessWidget {
                     }(),
                   );
                 } else {
-                  return AssetList(
-                    items: provider.items,
+                  return SizedBox(
+                    width: double.infinity,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: provider.items.where(
+                          (item) {
+                            if (item is Location) {
+                              return item.parentId == null;
+                            } else {
+                              final asset = item as Asset;
+                              return asset.parentId == null &&
+                                  asset.locationId == null;
+                            }
+                          },
+                        ).map(
+                          (itemNoParent) {
+                            return CompanyExpandableItem(
+                                currentItem: itemNoParent,
+                                allItems: provider.items);
+                          },
+                        ).toList(),
+                      ),
+                    ),
                   );
                 }
               }())
