@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tracitan_challenge_development/core/constants/messages.dart';
+import 'package:tracitan_challenge_development/domain/entities/asset.dart';
 import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
+import 'package:tracitan_challenge_development/domain/entities/location.dart';
 import 'package:tracitan_challenge_development/presentation/providers/asset_provider.dart';
 
 class AssetPage extends StatelessWidget {
@@ -50,12 +52,20 @@ class AssetPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: provider.items.where(
                             (item) {
-                              return item.parentId == null;
+                              if(item is Location){
+                                return item.parentId == null;
+                              }else{
+                                final asset = item as Asset;
+                                return asset.parentId == null && asset.locationId == null;
+                              }
                             },
                           ).map(
                             (itemNoParent) {
-                              //RFT-1510 nao esquece de remover esse runtimeType
-                              return TestWidget('${itemNoParent.name} ${itemNoParent.runtimeType}', children: provider.items.where((l) => l.parentId == itemNoParent.id).toList());
+                              //TODO: RFT-1510 nao esquece de remover esse runtimeType
+                              return TestWidget(
+                              currentItem: itemNoParent,
+                              allItems: provider.items
+                            );
                             },
                           ).toList(),
                       ),
@@ -73,13 +83,13 @@ class AssetPage extends StatelessWidget {
 
 class TestWidget extends StatefulWidget {
   const TestWidget(
-    this.name, {
+    {
+    required this.currentItem, required this.allItems,
     super.key,
-    required this.children
   });
 
-  final String name;
-  final List<CompanyItem> children;
+  final CompanyItem currentItem;
+  final List<CompanyItem> allItems;
 
   @override
   State<TestWidget> createState() => _TestWidgetState();
@@ -100,7 +110,8 @@ class _TestWidgetState extends State<TestWidget> {
               visible = !visible;
             });
           },
-          child: Text(widget.name)
+          //TODO:
+          child: Text('${widget.currentItem.name} ${widget.currentItem.runtimeType}')
         ),
         if(visible)
          Container(
@@ -108,10 +119,18 @@ class _TestWidgetState extends State<TestWidget> {
           padding: const EdgeInsets.only(left: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.children.map((parent){
-              return TestWidget(parent.name, children: widget.children.where((child){
-                return child.parentId == parent.id;
-              }).toList());
+            children: widget.allItems
+            .where((child){
+              if(child is Location){
+                return child.parentId == widget.currentItem.id;
+              }else{
+                final asset = child as Asset;
+                final currentItemId = widget.currentItem.id;
+                return asset.parentId == currentItemId || asset.locationId == currentItemId;
+              }
+            })
+            .map((child){
+              return TestWidget(currentItem: child, allItems: widget.allItems);
             }).toList(),
           ),
         )
