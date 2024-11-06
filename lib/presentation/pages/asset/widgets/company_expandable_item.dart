@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:tracitan_challenge_development/core/constants/image_paths.dart';
 import 'package:tracitan_challenge_development/domain/entities/asset.dart';
 import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
 import 'package:tracitan_challenge_development/domain/entities/location.dart';
@@ -33,7 +34,24 @@ class _CompanyExpandableItemState extends State<CompanyExpandableItem> {
               visible = !visible;
             });
           },
-          child: Text('${widget.currentItem.name} ${widget.currentItem.runtimeType}')
+          child: Row(
+            children: [
+              Image.asset((){
+                if(widget.currentItem is Asset){
+                  final asset = widget.currentItem as Asset;
+
+                  bool hasSensorType = asset.sensorType != null;
+                  if(hasSensorType){
+                    return ImagePaths.componentIcon;
+                  }else{
+                    return ImagePaths.assetIcon;
+                  }
+                }
+                return ImagePaths.locationIcon;
+              }(), height: 22.0, width: 22.0,),
+              Expanded(child: Text(widget.currentItem.name)),
+            ],
+          )
         ),
         if(visible)
          Container(
