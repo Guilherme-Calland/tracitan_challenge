@@ -1,9 +1,10 @@
+import 'package:tracitan_challenge_development/core/constants/enums/component_status.dart';
 import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
 
 class Asset extends CompanyItem{
   final String? sensorId;
   final String? sensorType;
-  final String? status;
+  final ComponentStatus? status;
   final String? gatewayId;
   final String? locationId;
 

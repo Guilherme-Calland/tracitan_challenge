@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:tracitan_challenge_development/core/constants/enums/component_status.dart';
 import 'package:tracitan_challenge_development/core/constants/image_paths.dart';
 import 'package:tracitan_challenge_development/domain/entities/asset.dart';
 import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
@@ -49,7 +50,23 @@ class _CompanyExpandableItemState extends State<CompanyExpandableItem> {
                 }
                 return ImagePaths.locationIcon;
               }(), height: 22.0, width: 22.0,),
-              Expanded(child: Text(widget.currentItem.name)),
+              Text(widget.currentItem.name),
+              (){
+                if(widget.currentItem is Asset){
+                  bool hasSensorType = (widget.currentItem as Asset).sensorType != null;
+                  if(hasSensorType){
+                    return Image.asset((){
+                      final asset = widget.currentItem as Asset;
+                      if(asset.status == ComponentStatus.alert){
+                        return ImagePaths.alertStatusIcon;
+                      }else{
+                        return ImagePaths.operationStatusIcon;
+                      }
+                    }());
+                  }
+                }
+                return const SizedBox();
+              }()
             ],
           )
         ),

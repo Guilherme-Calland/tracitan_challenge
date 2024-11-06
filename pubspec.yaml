@@ -67,6 +67,8 @@ flutter:
     - assets/asset.png
     - assets/component.png
     - assets/location.png
+    - assets/dot.png
+    - assets/bolt.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
