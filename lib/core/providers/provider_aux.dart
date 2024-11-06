@@ -8,6 +8,7 @@ import 'package:tracitan_challenge_development/domain/usecases/get_companies_use
 import 'package:tracitan_challenge_development/domain/usecases/get_locations_usecase.dart';
 import 'package:tracitan_challenge_development/presentation/providers/asset_provider.dart';
 import 'package:tracitan_challenge_development/presentation/providers/home_provider.dart';
+import 'package:tracitan_challenge_development/presentation/providers/status_provider.dart';
 
 class ProviderAux {
   static List<SingleChildWidget> providers = [
@@ -31,6 +32,9 @@ class ProviderAux {
           getLocationsUsecase: GetLocationsUsecase(repository),
         );
       },
+    ),
+    ChangeNotifierProvider<StatusProvider>(
+      create: (_) => StatusProvider()
     )
   ];
 }

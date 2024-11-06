@@ -21,7 +21,6 @@ class CompanyExpandableItem extends StatefulWidget {
 }
 
 class _CompanyExpandableItemState extends State<CompanyExpandableItem> {
-
   bool visible = false;
 
   @override
