@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tracitan_challenge_development/core/constants/messages.dart';
 import 'package:tracitan_challenge_development/domain/entities/asset.dart';
-import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
 import 'package:tracitan_challenge_development/domain/entities/location.dart';
+import 'package:tracitan_challenge_development/presentation/pages/asset/widgets/company_expandable_item.dart';
 import 'package:tracitan_challenge_development/presentation/providers/asset_provider.dart';
 
 class AssetPage extends StatelessWidget {
@@ -61,8 +61,7 @@ class AssetPage extends StatelessWidget {
                             },
                           ).map(
                             (itemNoParent) {
-                              //TODO: RFT-1510 nao esquece de remover esse runtimeType
-                              return TestWidget(
+                              return CompanyExpandableItem(
                               currentItem: itemNoParent,
                               allItems: provider.items
                             );
@@ -77,64 +76,6 @@ class AssetPage extends StatelessWidget {
           )
         ],
       ),
-    );
-  }
-}
-
-class TestWidget extends StatefulWidget {
-  const TestWidget(
-    {
-    required this.currentItem, required this.allItems,
-    super.key,
-  });
-
-  final CompanyItem currentItem;
-  final List<CompanyItem> allItems;
-
-  @override
-  State<TestWidget> createState() => _TestWidgetState();
-}
-
-class _TestWidgetState extends State<TestWidget> {
-
-  bool visible = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: (){
-            setState(() {
-              visible = !visible;
-            });
-          },
-          //TODO:
-          child: Text('${widget.currentItem.name} ${widget.currentItem.runtimeType}')
-        ),
-        if(visible)
-         Container(
-          width: double.infinity,
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.allItems
-            .where((child){
-              if(child is Location){
-                return child.parentId == widget.currentItem.id;
-              }else{
-                final asset = child as Asset;
-                final currentItemId = widget.currentItem.id;
-                return asset.parentId == currentItemId || asset.locationId == currentItemId;
-              }
-            })
-            .map((child){
-              return TestWidget(currentItem: child, allItems: widget.allItems);
-            }).toList(),
-          ),
-        )
-      ],
     );
   }
 }

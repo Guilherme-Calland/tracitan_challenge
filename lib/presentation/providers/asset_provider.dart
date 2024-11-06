@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tracitan_challenge_development/domain/entities/asset.dart';
 import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
-import 'package:tracitan_challenge_development/domain/entities/location.dart';
 import 'package:tracitan_challenge_development/domain/usecases/get_assets_usecase.dart';
 import 'package:tracitan_challenge_development/domain/usecases/get_locations_usecase.dart';
 

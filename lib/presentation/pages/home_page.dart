@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracitan_challenge_development/core/constants/messages.dart';
-import 'package:tracitan_challenge_development/core/widgets/company_button.dart';
+import 'package:tracitan_challenge_development/presentation/pages/home/widgets/company_button.dart';
 import 'package:tracitan_challenge_development/presentation/providers/home_provider.dart';
 import 'package:provider/provider.dart';
 
