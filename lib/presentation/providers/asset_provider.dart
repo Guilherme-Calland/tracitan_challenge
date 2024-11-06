@@ -81,9 +81,8 @@ class AssetProvider extends ChangeNotifier{
       _status = s;
     }
 
+    _items.clear();
     if(_status != null){
-      _items.clear();
-
       for (var item in _allItems) {
         if(item is Asset){
           bool isComponent = item.sensorType != null;
