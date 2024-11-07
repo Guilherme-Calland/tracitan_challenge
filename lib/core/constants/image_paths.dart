@@ -7,4 +7,6 @@ class ImagePaths{
   static const componentIcon = '${_basePath}component$_extension';
   static const alertStatusIcon = '${_basePath}dot$_extension';
   static const operationStatusIcon = '${_basePath}bolt$_extension';
+  static const logo = '${_basePath}logo$_extension';
+  static const blocks = '${_basePath}blocks$_extension';
 }
