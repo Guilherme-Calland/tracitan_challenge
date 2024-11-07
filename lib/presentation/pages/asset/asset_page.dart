@@ -58,13 +58,15 @@ class AssetPage extends StatelessWidget {
                       }).toList(),
                     ),
                     Expanded(child: () {
-                      if (provider.loading || provider.error) {
+                      if (provider.loading || provider.error || provider.emptyList) {
                         return Center(
                           child: () {
                             if (provider.loading) {
                               return const CircularProgressIndicator();
-                            } else {
+                            } else if(provider.error) {
                               return const Text(Messages.error);
+                            } else {
+                              return const Text(Messages.noItemsFound);
                             }
                           }(),
                         );

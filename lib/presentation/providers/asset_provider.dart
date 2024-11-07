@@ -20,6 +20,9 @@ class AssetProvider extends ChangeNotifier{
   
   bool _error = false;
   bool get error => _error;
+
+  bool _emptyList = false;
+  bool get emptyList => _emptyList;
   
   void clear(){
     _loading = true;
@@ -27,6 +30,7 @@ class AssetProvider extends ChangeNotifier{
     _items.clear();
     _allItems.clear();
     _status = null;
+    _emptyList = false;
   }
 
   final List<CompanyItem> _items = [];
@@ -37,10 +41,6 @@ class AssetProvider extends ChangeNotifier{
   ComponentStatus? get status => _status;
 
   Future<void> loadData(String companyId) async{
-    _error = false;
-    _loading = true;
-    notifyListeners();
-
     final futureLoadList = [
       _getLocations(companyId),
       _getAssets(companyId)
@@ -107,6 +107,8 @@ class AssetProvider extends ChangeNotifier{
       _items.addAll(_allItems);
     }
 
+    _emptyList = _items.isEmpty;
+
     notifyListeners();
   }
 
@@ -144,6 +146,8 @@ class AssetProvider extends ChangeNotifier{
     }
 
     _addParents();
+
+    _emptyList = _items.isEmpty;
 
     notifyListeners();
   }

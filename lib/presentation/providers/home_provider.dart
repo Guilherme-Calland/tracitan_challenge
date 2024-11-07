@@ -17,11 +17,17 @@ class HomeProvider extends ChangeNotifier{
   bool get hasError => _hasError;
 
   final List<Company> _companies = [];
+
+  bool _emptyList = false;
+  bool get emptyList => _emptyList;
+
   List<Company> get companies => _companies;
 
   Future<void> getCompanies()async{
     _hasError = false;
     _loading = true;
+    _emptyList = false;
+
     notifyListeners();
 
     final result = await getCompaniesUsecase(const NoParams());
@@ -30,7 +36,10 @@ class HomeProvider extends ChangeNotifier{
       debugPrint('$e');
     }, (companiesResult){
       _companies.clear();
-      _companies.addAll(companiesResult);
+      _emptyList = companiesResult.isEmpty;
+      if(!_emptyList){
+        _companies.addAll(companiesResult);
+      }
     });
 
     _loading = false;

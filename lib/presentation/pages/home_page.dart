@@ -23,14 +23,16 @@ class HomePage extends StatelessWidget {
         title: Image.asset(ImagePaths.logo),
       ),
       body: Consumer<HomeProvider>(
-        builder: (context, controller, __) {
-          if(controller.loading || controller.hasError){
+        builder: (context, provider, __) {
+          if(provider.loading || provider.hasError || provider.emptyList){
             return Center(
               child: (){
-                if(controller.loading){
+                if(provider.loading){
                   return const CircularProgressIndicator();
-                }else{
+                }else if(provider.hasError){
                   return const Text(Messages.error);
+                } else {
+                  return const Text(Messages.noItemsFound);
                 }
               }()
             );
@@ -48,9 +50,9 @@ class HomePage extends StatelessWidget {
                 separatorBuilder: (_, __){
                   return const SizedBox(height: 40.0);
                 },
-                itemCount: controller.companies.length,
+                itemCount: provider.companies.length,
                 itemBuilder: (_, index) {
-                  final company = controller.companies[index];
+                  final company = provider.companies[index];
                   return CompanyButton(company: company);
                 },
               ),
