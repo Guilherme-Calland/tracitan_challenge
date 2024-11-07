@@ -108,6 +108,7 @@ class AssetProvider extends ChangeNotifier{
     }
 
     _emptyList = _items.isEmpty;
+    _putLocationsFirst();
 
     notifyListeners();
   }
@@ -147,6 +148,7 @@ class AssetProvider extends ChangeNotifier{
 
     _addParents();
     _emptyList = _items.isEmpty;
+    _putLocationsFirst();
 
     notifyListeners();
   }
