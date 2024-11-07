@@ -31,6 +31,7 @@ class CompanyButton extends StatelessWidget {
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,
+                fontWeight: FontWeight.w500
               ),
             ),
           ],

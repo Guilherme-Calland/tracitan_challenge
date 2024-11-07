@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tracitan_challenge_development/core/constants/app_colors.dart';
 import 'package:tracitan_challenge_development/core/constants/enums/component_status.dart';
 import 'package:tracitan_challenge_development/core/constants/messages.dart';
 import 'package:tracitan_challenge_development/domain/entities/asset.dart';
@@ -27,16 +28,60 @@ class AssetPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.primaryDark,
         centerTitle: true,
-        title: const Text("Assets"),
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: const Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.white,
+            size: 32.0,
+          ),
+        ),
+        title: const Text(
+          "Assets",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18.0,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       ),
       body: Column(
         children: [
-          TextField(
-            onChanged: (val){
-              final assetProvider = context.read<AssetProvider>();
-              assetProvider.searchItem(val);
-            },
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            margin: () {
+              const margin = 16.0;
+              return const EdgeInsets.only(
+                left: margin,
+                right: margin,
+                top: margin,
+                bottom: 8.0,
+              );
+            }(),
+            decoration: BoxDecoration(
+              color: AppColors.lightGrey,
+              borderRadius: BorderRadius.circular(4.0)
+            ),
+            child: TextField(
+              decoration: const InputDecoration(
+                icon: Icon(Icons.search),
+                hintText: "Buscar Ativo ou Local",
+                border: InputBorder.none, 
+                enabledBorder: InputBorder.none, 
+                focusedBorder: InputBorder.none,
+                hintStyle: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.grey
+                )
+              ),
+              onChanged: (val){
+                final assetProvider = context.read<AssetProvider>();
+                assetProvider.searchItem(val);
+              },
+            ),
           ),
           Expanded(
             child: Consumer<AssetProvider>(

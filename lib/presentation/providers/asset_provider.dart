@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tracitan_challenge_development/core/constants/enums/component_status.dart';
 import 'package:tracitan_challenge_development/domain/entities/asset.dart';
 import 'package:tracitan_challenge_development/domain/entities/company_item.dart';
+import 'package:tracitan_challenge_development/domain/entities/location.dart';
 import 'package:tracitan_challenge_development/domain/usecases/get_assets_usecase.dart';
 import 'package:tracitan_challenge_development/domain/usecases/get_locations_usecase.dart';
 
@@ -32,7 +33,6 @@ class AssetProvider extends ChangeNotifier{
   List<CompanyItem> get items => _items;
 
   final List<CompanyItem> _allItems = [];
-
   ComponentStatus? _status;
   ComponentStatus? get status => _status;
 
@@ -42,15 +42,24 @@ class AssetProvider extends ChangeNotifier{
     notifyListeners();
 
     final futureLoadList = [
-      _getAssets(companyId),
-      _getLocations(companyId)
+      _getLocations(companyId),
+      _getAssets(companyId)
     ];
     await Future.wait(futureLoadList);
 
+    _putLocationsFirst();
     _allItems.addAll(_items);
 
     _loading = false;
     notifyListeners();
+  }
+
+  void _putLocationsFirst() {
+    final List<Location> locations = _items.whereType<Location>().toList();
+    final List<Asset> assets = _items.whereType<Asset>().toList();
+    _items.clear();
+    _items.addAll(locations);
+    _items.addAll(assets);
   }
   
   Future<void> _getAssets(String companyId) async{
