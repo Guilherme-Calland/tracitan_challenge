@@ -43,7 +43,12 @@ class AssetPage extends StatelessWidget {
         children: [
           AppSearchBar(
             hint: "Buscar Ativo ou Local",
-            onQueryChanged: (query) => _searchItem(context: context, query: query),
+            onQueryChanged: (query){
+              if(query.isEmpty){
+                _hideKeyBoard(context);
+              }
+              _searchItem(context: context, query: query);
+            },
             controller: (){
               final provider = context.read<AssetProvider>();
               return provider.searchController;

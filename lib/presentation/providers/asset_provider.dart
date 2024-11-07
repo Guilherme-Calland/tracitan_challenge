@@ -88,7 +88,7 @@ class AssetProvider extends ChangeNotifier{
 
   void changeStatus(ComponentStatus s){
     _searchController.clear();
-        
+
     bool alreadySelected = s == _status;
     if(alreadySelected){
       _status = null;
@@ -106,15 +106,14 @@ class AssetProvider extends ChangeNotifier{
           }
         }
       }
-
       _addParents();
+      _putLocationsFirst();
 
     }else{
       _items.addAll(_allItems);
     }
 
     _emptyList = _items.isEmpty;
-    _putLocationsFirst();
 
     notifyListeners();
   }
@@ -124,7 +123,14 @@ class AssetProvider extends ChangeNotifier{
     newParentItems.addAll(_items);
     do {
       List<CompanyItem> tempList = [];
-      for(var item in _allItems){
+      
+      final idsToRemove = _items.map((item) => item.id).toSet();
+
+      final List<CompanyItem> remainingItems = [];
+      remainingItems.addAll(_allItems);
+      remainingItems.removeWhere((item) => idsToRemove.contains(item.id));
+
+      for(var item in remainingItems){
         bool itemHasSavedParent = newParentItems.any((i){
           if(i is Asset){
             return i.parentId == item.id || i.locationId == item.id;
@@ -146,6 +152,7 @@ class AssetProvider extends ChangeNotifier{
   void searchItem(String query) {
     _status = null;
     _items.clear();
+
     for (var item in _allItems) {
       bool nameContainsQuery =  RegExp(query, caseSensitive: false).hasMatch(item.name);
       if(nameContainsQuery){
@@ -153,9 +160,24 @@ class AssetProvider extends ChangeNotifier{
       }
     }
 
-    _addParents();
+    final List<CompanyItem> currentItems = [];
+    currentItems.addAll(_items);
+    _items.removeWhere((i){
+      bool hasChildren = currentItems.any((j){
+        if(j is Asset){
+          return j.parentId == i.id || j.locationId == i.id;
+        }else{
+          return j.parentId == i.id;
+        }
+      });
+      return hasChildren;
+    });
+
     _emptyList = _items.isEmpty;
-    _putLocationsFirst();
+    if(!_emptyList){
+      _addParents();
+      _putLocationsFirst();
+    }
 
     notifyListeners();
   }
