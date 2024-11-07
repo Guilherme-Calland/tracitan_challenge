@@ -92,32 +92,49 @@ class AssetProvider extends ChangeNotifier{
         }
       }
 
-      final List<CompanyItem> newParentItems = [];
-      newParentItems.addAll(_items);
-      do {
-        List<CompanyItem> tempList = [];
-        for(var item in _allItems){
-          bool itemHasSavedParent = newParentItems.any((i){
-            if(i is Asset){
-              return i.parentId == item.id || i.locationId == item.id;
-            }else{
-              return i.parentId == item.id;
-            }
-          });
-          if(itemHasSavedParent) {
-            tempList.add(item);
-          }
-        }
-
-        newParentItems.clear();
-        newParentItems.addAll(tempList);
-        _items.addAll(tempList);
-      } while (newParentItems.isNotEmpty);
-
+      _addParents();
 
     }else{
       _items.addAll(_allItems);
     }
+
+    notifyListeners();
+  }
+
+  void _addParents() {
+    final List<CompanyItem> newParentItems = [];
+    newParentItems.addAll(_items);
+    do {
+      List<CompanyItem> tempList = [];
+      for(var item in _allItems){
+        bool itemHasSavedParent = newParentItems.any((i){
+          if(i is Asset){
+            return i.parentId == item.id || i.locationId == item.id;
+          }else{
+            return i.parentId == item.id;
+          }
+        });
+        if(itemHasSavedParent) {
+          tempList.add(item);
+        }
+      }
+    
+      newParentItems.clear();
+      newParentItems.addAll(tempList);
+      _items.addAll(tempList);
+    } while (newParentItems.isNotEmpty);
+  }
+
+  void searchItem(String query) {
+    _items.clear();
+    for (var item in _allItems) {
+      bool nameContainsQuery =  RegExp(query, caseSensitive: false).hasMatch(item.name);
+      if(nameContainsQuery){
+        _items.add(item);
+      }
+    }
+
+    _addParents();
 
     notifyListeners();
   }
