@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tracitan_challenge_development/core/constants/app_colors.dart';
 import 'package:tracitan_challenge_development/core/constants/enums/component_status.dart';
 import 'package:tracitan_challenge_development/core/constants/messages.dart';
+import 'package:tracitan_challenge_development/core/widgets/loading_indicator.dart';
 import 'package:tracitan_challenge_development/core/widgets/seach_bar.dart';
 import 'package:tracitan_challenge_development/domain/entities/asset.dart';
 import 'package:tracitan_challenge_development/domain/entities/location.dart';
@@ -43,6 +44,10 @@ class AssetPage extends StatelessWidget {
           AppSearchBar(
             hint: "Buscar Ativo ou Local",
             onQueryChanged: (query) => _searchItem(context: context, query: query),
+            controller: (){
+              final provider = context.read<AssetProvider>();
+              return provider.searchController;
+            }(),
           ),
           Expanded(
             child: Consumer<AssetProvider>(
@@ -62,7 +67,10 @@ class AssetPage extends StatelessWidget {
                               child: StatusButton(
                                 iconPath: status.iconPath,
                                 selected: provider.status == status,
-                                onSelected: () => provider.changeStatus(status),
+                                onSelected: (){
+                                  _hideKeyBoard(context);
+                                  provider.changeStatus(status);
+                                },
                                 label: status.label,
                               ),
                             );
@@ -76,7 +84,7 @@ class AssetPage extends StatelessWidget {
                         return Center(
                           child: () {
                             if (provider.loading) {
-                              return const CircularProgressIndicator();
+                              return const LoadingIndicator();
                             } else if(provider.error) {
                               return const Text(Messages.error);
                             } else {
@@ -121,6 +129,10 @@ class AssetPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _hideKeyBoard(BuildContext context) {
+    FocusScope.of(context).unfocus();
   }
 
   TextStyle _buildAppBarTitleTextStyle() {

@@ -31,6 +31,7 @@ class AssetProvider extends ChangeNotifier{
     _allItems.clear();
     _status = null;
     _emptyList = false;
+    _searchController.clear();
   }
 
   final List<CompanyItem> _items = [];
@@ -39,6 +40,9 @@ class AssetProvider extends ChangeNotifier{
   final List<CompanyItem> _allItems = [];
   ComponentStatus? _status;
   ComponentStatus? get status => _status;
+
+  final TextEditingController _searchController = TextEditingController();
+  TextEditingController get searchController => _searchController;
 
   Future<void> loadData(String companyId) async{
     final futureLoadList = [
@@ -83,6 +87,8 @@ class AssetProvider extends ChangeNotifier{
   }
 
   void changeStatus(ComponentStatus s){
+    _searchController.clear();
+        
     bool alreadySelected = s == _status;
     if(alreadySelected){
       _status = null;
@@ -138,6 +144,7 @@ class AssetProvider extends ChangeNotifier{
   }
 
   void searchItem(String query) {
+    _status = null;
     _items.clear();
     for (var item in _allItems) {
       bool nameContainsQuery =  RegExp(query, caseSensitive: false).hasMatch(item.name);

@@ -4,11 +4,12 @@ import 'package:tracitan_challenge_development/core/constants/app_colors.dart';
 
 class AppSearchBar extends StatelessWidget {
   const AppSearchBar({
-    super.key, required this.hint, required this.onQueryChanged,
+    super.key, required this.hint, required this.onQueryChanged, required this.controller,
   });
 
   final String hint;
   final Function(String) onQueryChanged;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +29,7 @@ class AppSearchBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(4.0)
       ),
       child: TextField(
+        controller: controller,
         decoration: InputDecoration(
           icon: const Icon(Icons.search, color: AppColors.grey,),
           hintText: hint,
