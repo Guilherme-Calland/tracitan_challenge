@@ -24,12 +24,6 @@ class HomeProvider extends ChangeNotifier{
   List<Company> get companies => _companies;
 
   Future<void> getCompanies()async{
-    _hasError = false;
-    _loading = true;
-    _emptyList = false;
-
-    notifyListeners();
-
     final result = await getCompaniesUsecase(const NoParams());
     result.fold((e){
       _hasError = true;

@@ -146,7 +146,6 @@ class AssetProvider extends ChangeNotifier{
     }
 
     _addParents();
-
     _emptyList = _items.isEmpty;
 
     notifyListeners();
