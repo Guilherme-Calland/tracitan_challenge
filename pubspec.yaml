@@ -71,6 +71,8 @@ flutter:
     - assets/bolt.png
     - assets/logo.png
     - assets/blocks.png
+    - assets/bolt_hollow.png
+    - assets/warning.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

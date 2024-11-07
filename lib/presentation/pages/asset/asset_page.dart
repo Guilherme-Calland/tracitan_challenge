@@ -28,6 +28,7 @@ class AssetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: AppColors.primaryDark,
         centerTitle: true,
@@ -48,15 +49,27 @@ class AssetPage extends StatelessWidget {
               builder: (_, provider, __) {
                 return Column(
                   children: [
-                    Row(
-                      children: ComponentStatus.values.map((s) {
-                        return StatusButton(
-                          selected: provider.status == s,
-                          onSelected: () => provider.changeStatus(s),
-                          label: s.label,
-                        );
-                      }).toList(),
-                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: Row(
+                        children: List.generate(
+                          ComponentStatus.values.length,
+                          (index) {
+                            final status = ComponentStatus.values[index];
+                            final isFirst = index == 0;
+                            return Padding(
+                              padding: isFirst ? EdgeInsets.zero : const EdgeInsets.only(left: 8.0),
+                              child: StatusButton(
+                                iconPath: status.iconPath,
+                                selected: provider.status == status,
+                                onSelected: () => provider.changeStatus(status),
+                                label: status.label,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),                            
                     Expanded(child: () {
                       if (provider.loading || provider.error || provider.emptyList) {
                         return Center(
