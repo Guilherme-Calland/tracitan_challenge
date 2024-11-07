@@ -39,7 +39,7 @@ class _CompanyExpandableItemState extends State<CompanyExpandableItem> {
               Image.asset((){
                 if(widget.currentItem is Asset){
                   final asset = widget.currentItem as Asset;
-
+    
                   bool hasSensorType = asset.sensorType != null;
                   if(hasSensorType){
                     return ImagePaths.componentIcon;
@@ -49,7 +49,10 @@ class _CompanyExpandableItemState extends State<CompanyExpandableItem> {
                 }
                 return ImagePaths.locationIcon;
               }(), height: 22.0, width: 22.0,),
-              Text(widget.currentItem.name),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Text(widget.currentItem.name),
+              ),
               (){
                 if(widget.currentItem is Asset){
                   bool hasSensorType = (widget.currentItem as Asset).sensorType != null;
@@ -69,6 +72,7 @@ class _CompanyExpandableItemState extends State<CompanyExpandableItem> {
             ],
           )
         ),
+        const SizedBox(height: 4.0),
         if(visible)
          Container(
           width: double.infinity,

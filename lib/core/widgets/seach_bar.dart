@@ -29,7 +29,7 @@ class AppSearchBar extends StatelessWidget {
       ),
       child: TextField(
         decoration: InputDecoration(
-          icon: const Icon(Icons.search),
+          icon: const Icon(Icons.search, color: AppColors.grey,),
           hintText: hint,
           border: InputBorder.none, 
           enabledBorder: InputBorder.none, 

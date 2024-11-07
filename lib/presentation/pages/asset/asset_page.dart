@@ -69,7 +69,8 @@ class AssetPage extends StatelessWidget {
                           },
                         ),
                       ),
-                    ),                            
+                    ),
+                    const SizedBox(height: 16.0),                            
                     Expanded(child: () {
                       if (provider.loading || provider.error || provider.emptyList) {
                         return Center(
@@ -84,7 +85,8 @@ class AssetPage extends StatelessWidget {
                           }(),
                         );
                       } else {
-                        return SizedBox(
+                        return Container(
+                          padding: const EdgeInsets.only(left: 16.0),
                           width: double.infinity,
                           child: SingleChildScrollView(
                             child: Column(
